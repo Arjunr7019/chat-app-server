@@ -11,14 +11,14 @@ app.use(express.json())
 app.use(cors())
 app.use("/api/user", userRoute);
 
-// mongoose.connect(process.env.CON_STR, {
-//     useNewUrlParser: true
-// }).then((conn) => {
-//     // console.log(conn);
-//     console.log("DB connected successful");
-// }).catch((error) => {
-//     console.log(error);
-// })
+mongoose.connect(process.env.CON_STR, {
+    useNewUrlParser: true
+}).then((conn) => {
+    // console.log(conn);
+    console.log("DB connected successful");
+}).catch((error) => {
+    console.log(error);
+})
 
 app.get("/api", (req, res)=>{
     res.json("hello");
