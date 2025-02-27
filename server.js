@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require('dotenv');
 const mongoose = require("mongoose")
-const userRoute = require("./Routes/userRoute")
+const userRoute = require("./Routes/userRoute");
+const chatRoute = require("./Routes/chatRoute");
 
 const app = express();
 dotenv.config({ path: './config.env' });
@@ -10,6 +11,7 @@ dotenv.config({ path: './config.env' });
 app.use(express.json())
 app.use(cors())
 app.use("/api/user", userRoute);
+app.use("/api/chats", chatRoute);
 
 mongoose.connect(process.env.CON_STR, {
     useNewUrlParser: true
