@@ -57,23 +57,24 @@ const loginUser = async (req, res) => {
     }
 }
 
-const findUser = async (req,res)=>{
+const findUser = async (req, res) => {
     const userId = req.params.userId;
 
-    try{
+    try {
         const user = await userModel.findById(userId).select("-password");
         res.status(200).json(user);
-    }catch(err){
+    } catch (err) {
         res.status(500), json(err);
     }
 }
 
-const getUsers = async (req,res)=>{
-    try{
+const getUsers = async (req, res) => {
+    try {
         const users = await userModel.find().select("-password");
         res.status(200).json(users);
-    }catch(err){
+    } catch (err) {
         res.status(500), json(err);
     }
 }
+
 module.exports = { registerUser, loginUser, findUser, getUsers }

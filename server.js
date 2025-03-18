@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require('dotenv');
+const http = require("http");
+const { Server } = require("socket.io");
 const mongoose = require("mongoose")
 const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
@@ -8,6 +10,35 @@ const messageRoute = require("./Routes/messageRoute");
 
 const app = express();
 dotenv.config({ path: './config.env' });
+
+const server = http.createServer(app); // Create HTTP server
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Adjust this to match your frontend URL in production
+    methods: ["GET", "POST"],
+  },
+});
+
+let onlineUsers = [];
+io.on("connection",(socket)=>{
+    // console.log("newConnection", socket.id);
+
+    socket.on("addNewUser",(userId)=>{
+        !onlineUsers.some(user=> user.userId === userId) &&
+        onlineUsers.push({
+            userId,
+            socketId: socket.id
+        })
+        io.emit("getOnlineUsers",onlineUsers)
+        // console.log("onlineUsers",onlineUsers);
+    })
+
+    socket.on("disconnect",()=>{
+        onlineUsers = onlineUsers.filter(user=> user.socketId !== socket.id);
+
+        io.emit("getOnlineUsers",onlineUsers)
+    })
+})
 
 app.use(express.json())
 app.use(cors())
@@ -31,4 +62,7 @@ app.post("/api/test", (req, res)=>{
     res.json(req.body);
 })
 
-app.listen(5000, ()=> {console.log('Server started on port 5000')})
+const PORT = 5000;
+server.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+  });
