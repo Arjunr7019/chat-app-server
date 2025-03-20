@@ -33,6 +33,17 @@ io.on("connection",(socket)=>{
         // console.log("onlineUsers",onlineUsers);
     })
 
+    //add message
+    socket.on("sendMessage",(message)=>{
+        const user = onlineUsers.find(user=> user.userId === message.recipientId);
+
+        // console.log(message)
+
+        if(user){
+            io.to(user.socketId).emit("getMessage",message)
+        }
+    })
+
     socket.on("disconnect",()=>{
         onlineUsers = onlineUsers.filter(user=> user.socketId !== socket.id);
 
