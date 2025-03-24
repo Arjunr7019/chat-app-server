@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
         const token = createToken(user._id);
         res.status(200).json({ _id: user._id, name, email, token });
     } catch (err) {
-        res.status(500), json(err);
+        res.status(500).json(err);
     }
 }
 
@@ -53,7 +53,7 @@ const loginUser = async (req, res) => {
         const token = createToken(user._id);
         res.status(200).json({ _id: user._id, name: user.name, email, token });
     } catch (err) {
-        res.status(500), json(err);
+        res.status(500).json(err);
     }
 }
 
@@ -64,7 +64,21 @@ const findUser = async (req, res) => {
         const user = await userModel.findById(userId).select("-password");
         res.status(200).json(user);
     } catch (err) {
-        res.status(500), json(err);
+        res.status(500).json(err);
+    }
+}
+
+const findUserByEmail = async(req, res)=>{
+    const email = req.params.email;
+
+    try {
+        let user = await userModel.findOne({ email }).select("-password");
+
+        if (!user) return res.status(400).json("not an registered user");
+
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json(err);
     }
 }
 
@@ -73,8 +87,8 @@ const getUsers = async (req, res) => {
         const users = await userModel.find().select("-password");
         res.status(200).json(users);
     } catch (err) {
-        res.status(500), json(err);
+        res.status(500).json(err);
     }
 }
 
-module.exports = { registerUser, loginUser, findUser, getUsers }
+module.exports = { registerUser, loginUser, findUser, getUsers, findUserByEmail }
