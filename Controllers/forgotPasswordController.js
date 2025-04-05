@@ -44,7 +44,7 @@ const SendOtp = async (req, res) => {
 
     console.log("Message sent:", info.messageId);
     
-    res.status(200).json(info.messageId);
+    res.status(200).json({otp:otp,message:info.messageId});
 }
 
 module.exports = { SendOtp }
