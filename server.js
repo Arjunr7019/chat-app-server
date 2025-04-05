@@ -7,6 +7,7 @@ const mongoose = require("mongoose")
 const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
 const messageRoute = require("./Routes/messageRoute");
+const forgotPasswordRoute = require("./Routes/forgotPasswordRoute");
 
 const app = express();
 dotenv.config({ path: './config.env' });
@@ -56,6 +57,7 @@ app.use(cors())
 app.use("/api/user", userRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
+app.use("/api/forgotPassword", forgotPasswordRoute);
 
 mongoose.connect(process.env.CON_STR, {
     useNewUrlParser: true
