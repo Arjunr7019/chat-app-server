@@ -10,8 +10,8 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: false, // Use `true` for port 465, `false` for all other ports
     auth: {
-        user: process.env.USER,
-        pass: process.env.APP_PASS
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     },
 });
 
@@ -28,9 +28,9 @@ const SendOtp = async (req, res) => {
     const info = await transporter.sendMail({
         from: {
             name: "Jelly Fish Suport Team",
-            address: process.env.USER
+            address: process.env.EMAIL_USER
         },
-        to: req.body.email, // list of receivers
+        to: process.env.EMAIL_USER, // list of receivers
         subject: "Password Reset OTP for Your Account", // Subject line
         text: "", // plain text body
         html: `Dear user,<br/><br/>
@@ -44,7 +44,8 @@ const SendOtp = async (req, res) => {
 
     console.log("Message sent:", info.messageId);
     
-    res.status(200).json({otp:otp,message:info.messageId});
+    // res.status(200).json({otp:otp,message:info.messageId});
+    res.status(200).json({otp:otp,email:info.messageId});
 }
 
 module.exports = { SendOtp }
