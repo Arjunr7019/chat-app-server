@@ -45,8 +45,6 @@ const SendOtp = async (req, res) => {
     console.log("Message sent:", info.messageId);
 
     res.status(200).json({ otp: otp });
-    // console.log("EMAIL_USER Raw:", process.env.EMAIL_USER);
-    // console.log("EMAIL_PASS Length:", process.env.EMAIL_PASS.length);
 }
 
 module.exports = { SendOtp }
