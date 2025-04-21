@@ -12,8 +12,8 @@ const SendOtp = async (req, res) => {
 
     const otp = generateOtp();
 
-    // const newOtp = new forgotPassword({ email, otp });
-    // await newOtp.save();
+    const newOtp = new forgotPassword({ email, otp });
+    await newOtp.save();
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -37,7 +37,7 @@ const SendOtp = async (req, res) => {
         html: `Dear user,<br/><br/>
         We have received a request to reset the password for your account. To ensure the security of your account, please use the following One-Time Password (OTP) to complete the password reset process:<br/><br/>
         OTP: ${otp} <br/><br/>
-        Please note that this OTP is valid for a limited time period only. If you did not request this password reset, please disregard this email.<br/><br/>
+        Please note that this OTP is valid for a limited time period only(5 mins). If you did not request this password reset, please disregard this email.<br/><br/>
         Thank you for your attention to this matter.<br/><br/>
         Best regards,<br/>
         Jelly Fish Suport Team`
