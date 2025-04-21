@@ -4,16 +4,6 @@ const nodemailer = require("nodemailer");
 const generateOtp = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // Use `true` for port 465, `false` for all other ports
-    auth: {
-        user:JSON.stringify(process.env.EMAIL_USER),
-        pass:JSON.stringify(process.env.EMAIL_PASS),
-    },
-});
 
 const SendOtp = async (req, res) => {
     const { email } = req.body;
@@ -24,6 +14,17 @@ const SendOtp = async (req, res) => {
 
     // const newOtp = new forgotPassword({ email, otp });
     // await newOtp.save();
+
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // Use `true` for port 465, `false` for all other ports
+        auth: {
+            user:process.env.EMAIL_USER,
+            pass:process.env.EMAIL_PASS,
+        },
+    });
 
     const info = await transporter.sendMail({
         from: {
