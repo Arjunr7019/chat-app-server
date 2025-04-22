@@ -48,8 +48,24 @@ const SendOtp = async (req, res) => {
     res.status(200).json({ otp: otp });
 }
 
-const UpdateNewPassword = async(req, res)=>{
+const VarifyAndUpdateNewPassword = async(req, res)=>{
+    const {email,otp} = req.body;
 
+    try{
+        const userRecord = await forgotPassword.findOne({ email });
+    
+        if (!userRecord) return res.status(404).json({ message: "User not found" });
+    
+    
+        if(userRecord.otp === otp){
+            res.status(200).json("otp is valid");
+        }else{
+            res.status(400).json("otp is not valid");
+        }
+    }catch(err){
+        console.error("Error in VarifyAndUpdateNewPassword:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
 }
 
-module.exports = { SendOtp }
+module.exports = { SendOtp, VarifyAndUpdateNewPassword }
