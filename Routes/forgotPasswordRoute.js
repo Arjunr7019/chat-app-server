@@ -4,6 +4,6 @@ const { models } = require("mongoose");
 
 const router = express.Router();
 
-router.post("/", SendOtp);
+router.get("/:email", SendOtp);
 
 module.exports = router;

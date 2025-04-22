@@ -6,7 +6,7 @@ const generateOtp = () => {
 }
 
 const SendOtp = async (req, res) => {
-    const { email } = req.body;
+    const email = req.params.email;
 
     await forgotPassword.deleteMany({ email });
 
@@ -46,6 +46,10 @@ const SendOtp = async (req, res) => {
     console.log("Message sent:", info.messageId);
 
     res.status(200).json({ otp: otp });
+}
+
+const UpdateNewPassword = async(req, res)=>{
+
 }
 
 module.exports = { SendOtp }
