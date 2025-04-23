@@ -1,4 +1,5 @@
 const forgotPassword = require("../Models/forgotPasswordModel");
+const userModel = require("../Models/userModel");
 const nodemailer = require("nodemailer");
 
 const generateOtp = () => {
@@ -55,7 +56,6 @@ const VarifyAndUpdateNewPassword = async(req, res)=>{
         const userRecord = await forgotPassword.findOne({ email });
     
         if (!userRecord) return res.status(404).json({ message: "User not found" });
-    
     
         if(userRecord.otp === otp){
             res.status(200).json("otp is valid");
