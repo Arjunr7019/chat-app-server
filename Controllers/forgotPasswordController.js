@@ -55,7 +55,7 @@ const VarifyAndUpdateNewPassword = async(req, res)=>{
     try{
         const userRecord = await forgotPassword.findOne({ email });
     
-        if (!userRecord) return res.status(404).json({ message: "User not found" });
+        if (!userRecord) return res.status(404).json({ message: "otp expired! better luck next time." });
     
         if(userRecord.otp === otp){
             res.status(200).json("otp is valid");
