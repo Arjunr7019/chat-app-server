@@ -22,8 +22,8 @@ const SendOtp = async (req, res) => {
         port: 587,
         secure: false, // Use `true` for port 465, `false` for all other ports
         auth: {
-            user:process.env.EMAIL_USER,
-            pass:process.env.EMAIL_PASS,
+            user: "arjun.rdell@gmail.com",
+            pass: "vicc vmbw bcbt leml",
         },
     });
 
@@ -36,33 +36,31 @@ const SendOtp = async (req, res) => {
         subject: "Password Reset OTP for Your Account", // Subject line
         text: "", // plain text body
         html: `Dear user,<br/><br/>
-        We have received a request to reset the password for your account. To ensure the security of your account, please use the following One-Time Password (OTP) to complete the password reset process:<br/><br/>
-        OTP: ${otp} <br/><br/>
-        Please note that this OTP is valid for a limited time period only(5 mins). If you did not request this password reset, please disregard this email.<br/><br/>
-        Thank you for your attention to this matter.<br/><br/>
-        Best regards,<br/>
-        Jelly Fish Suport Team`
+            We have received a request to reset the password for your account. To ensure the security of your account, please use the following One-Time Password (OTP) to complete the password reset process:<br/><br/>
+            OTP: ${otp} <br/><br/>
+            Please note that this OTP is valid for a limited time period only(5 mins). If you did not request this password reset, please disregard this email.<br/><br/>
+            Thank you for your attention to this matter.<br/><br/>
+            Best regards,<br/>
+            Jelly Fish Suport Team`
     });
-
     console.log("Message sent:", info.messageId);
-
     res.status(200).json({ otp: otp });
 }
 
-const VarifyAndUpdateNewPassword = async(req, res)=>{
-    const {email,otp} = req.body;
+const VarifyAndUpdateNewPassword = async (req, res) => {
+    const { email, otp } = req.body;
 
-    try{
+    try {
         const userRecord = await forgotPassword.findOne({ email });
-    
+
         if (!userRecord) return res.status(404).json({ message: "otp expired! better luck next time." });
-    
-        if(userRecord.otp === otp){
+
+        if (userRecord.otp === otp) {
             res.status(200).json("otp is valid");
-        }else{
+        } else {
             res.status(400).json("otp is not valid");
         }
-    }catch(err){
+    } catch (err) {
         console.error("Error in VarifyAndUpdateNewPassword:", err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
