@@ -22,8 +22,8 @@ const SendOtp = async (req, res) => {
         port: 587,
         secure: false, // Use `true` for port 465, `false` for all other ports
         auth: {
-            user: "arjun.rdell@gmail.com",
-            pass: "vicc vmbw bcbt leml",
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
         },
     });
 
