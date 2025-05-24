@@ -1,4 +1,6 @@
 const messageModel = require("../Models/messageModel");
+const userModel = require("../Models/userModel");
+const chatModel = require("../Models/chatModel");
 
 const createMessage = async (req, res) => {
     const { chatId, senderId, text } = req.body;
@@ -30,18 +32,49 @@ const getMessage = async (req, res) => {
     }
 }
 
+const getLastMessage = async (chatId) => {
+  return await messageModel
+    .findOne({ chatId })
+    .sort({ createdAt: -1 });
+};
+
 const lastMessage = async (req, res) => {
-    const { chatId } = req.params;
+    // const { chatId,userId } = req.body;
+    const { userId } = req.params;
+    let members = []
+    let latestMessages = [];
 
     try {
-        const latestMessage = await messageModel
-            .findOne({ chatId })
-            .sort({ createdAt: -1 });
+        const users = await userModel.find().select("-password");
 
-        res.status(200).json(latestMessage);
+        users.map((e) => {
+            if (userId.includes(e._id)) members.push(e);
+        });
+
+        // for(const user of userId){
+        //     console.log(user.chatId);
+        //     try{
+        //         const lastMsg = await getLastMessage(user.chatId);
+        //        if (lastMsg) latestMessages.push(lastMsg);
+        //     }catch(err){
+
+        //     }
+        // }
+        res.status(200).json(latestMessages);
     } catch (err) {
-        res.status(500).json(err);
+
     }
+
+
+    // try {
+    //     const latestMessage = await messageModel
+    //         .findOne({ chatId })
+    //         .sort({ createdAt: -1 });
+
+    //     res.status(200).json(latestMessage);
+    // } catch (err) {
+    //     res.status(500).json(err);
+    // }
 }
 
-module.exports = { createMessage, getMessage,lastMessage };
+module.exports = { createMessage, getMessage, lastMessage };
