@@ -30,4 +30,18 @@ const getMessage = async (req, res) => {
     }
 }
 
-module.exports = { createMessage, getMessage };
+const lastMessage = async (req, res) => {
+    const { chatId } = req.params;
+
+    try {
+        const latestMessage = await messageModel
+            .findOne({ chatId })
+            .sort({ createdAt: -1 });
+
+        res.status(200).json(latestMessage);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+module.exports = { createMessage, getMessage,lastMessage };
