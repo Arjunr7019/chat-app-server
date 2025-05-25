@@ -43,7 +43,7 @@ const lastMessage = async (req, res) => {
     const { userId } = req.params;
     let members = []
     let latestMessages = [];
-
+    const userData = JSON.parse(userId)
     try {
         const users = await userModel.find().select("-password");
 
@@ -51,30 +51,20 @@ const lastMessage = async (req, res) => {
             if (userId.includes(e._id)) members.push(e);
         });
 
-        // for(const user of userId){
-        //     console.log(user.chatId);
-        //     try{
-        //         const lastMsg = await getLastMessage(user.chatId);
-        //        if (lastMsg) latestMessages.push(lastMsg);
-        //     }catch(err){
+        for(const user of userData){
+            let i = 0;
+            try{
+                const lastMsg = await getLastMessage(user.chatId);
+               if (lastMsg) latestMessages.push({"user":members[i],"lastMessage":lastMsg});
+               else latestMessages.push({"user":members[i],"text": ""});
+            }catch(err){
 
-        //     }
-        // }
+            }
+        }
         res.status(200).json(latestMessages);
     } catch (err) {
 
     }
-
-
-    // try {
-    //     const latestMessage = await messageModel
-    //         .findOne({ chatId })
-    //         .sort({ createdAt: -1 });
-
-    //     res.status(200).json(latestMessage);
-    // } catch (err) {
-    //     res.status(500).json(err);
-    // }
 }
 
 module.exports = { createMessage, getMessage, lastMessage };
