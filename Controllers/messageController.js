@@ -43,6 +43,7 @@ const lastMessage = async (req, res) => {
     const { userId } = req.params;
     let members = []
     let latestMessages = [];
+    
     const userData = JSON.parse(userId)
     try {
         const users = await userModel.find().select("-password");
@@ -51,12 +52,18 @@ const lastMessage = async (req, res) => {
             if (userId.includes(e._id)) members.push(e);
         });
 
+        let i = 0;
         for(const user of userData){
-            let i = 0;
             try{
                 const lastMsg = await getLastMessage(user.chatId);
-               if (lastMsg) latestMessages.push({"user":members[i],"lastMessage":lastMsg});
-               else latestMessages.push({"user":members[i],"text": ""});
+               if (lastMsg) {
+                latestMessages.push({"user":members[i],"lastMessage":lastMsg});
+                i++
+               }
+               else {
+                latestMessages.push({"user":members[i],"lastMessage":{"text": ""}});
+                i++
+               }
             }catch(err){
 
             }
