@@ -55,7 +55,7 @@ const SendOtp = async (req, res) => {
 
 }
 
-const VarifyOtp = async (req, res) => {
+const VerifyOtp = async (req, res) => {
     const { email, otp } = req.body;
 
     try {
@@ -69,7 +69,7 @@ const VarifyOtp = async (req, res) => {
             res.status(400).json("otp is not valid");
         }
     } catch (err) {
-        console.error("Error in VarifyAndUpdateNewPassword:", err);
+        console.error("Error in VerifyAndUpdateNewPassword:", err);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }
@@ -102,4 +102,4 @@ const UpdateNewPassword = async (req, res) => {
     }
 }
 
-module.exports = { SendOtp, VarifyOtp, UpdateNewPassword }
+module.exports = { SendOtp, VerifyOtp, UpdateNewPassword }
