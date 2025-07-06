@@ -8,9 +8,16 @@ const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
 const messageRoute = require("./Routes/messageRoute");
 const forgotPasswordRoute = require("./Routes/forgotPasswordRoute");
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 dotenv.config({ path: './config.env' });
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 15 minutes
+  max: 7, // Limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again after 15 minutes."
+});
 
 const server = http.createServer(app); // Create HTTP server
 const io = new Server(server, {
@@ -52,6 +59,7 @@ io.on("connection",(socket)=>{
     })
 })
 
+app.use(limiter);
 app.use(express.json())
 app.use(cors())
 app.use("/api/user", userRoute);
