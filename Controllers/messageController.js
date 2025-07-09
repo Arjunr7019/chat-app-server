@@ -38,40 +38,42 @@ const getLastMessage = async (chatId) => {
     .sort({ createdAt: -1 });
 };
 
-const lastMessage = async (req, res) => {
-    // const { chatId,userId } = req.body;
-    const { userId } = req.params;
-    let members = []
-    let latestMessages = [];
+// const lastMessage = async (req, res) => {
+//     // const { chatId,userId } = req.body;
+//     const { userId } = req.params;
+//     let members = []
+//     let latestMessages = [];
     
-    const userData = JSON.parse(userId)
-    try {
-        const users = await userModel.find().select("-password");
+//     const userData = JSON.parse(userId)
+//     try {
+//         const users = await userModel.find().select("-password");
 
-        users.map((e) => {
-            if (userId.includes(e._id)) members.push(e);
-        });
+//         users.map((e) => {
+//             if (userId.includes(e._id)) members.push(e);
+//         });
 
-        let i = 0;
-        for(const user of userData){
-            try{
-                const lastMsg = await getLastMessage(user.chatId);
-               if (lastMsg) {
-                latestMessages.push({"user":members[i],"lastMessage":lastMsg});
-                i++
-               }
-               else {
-                latestMessages.push({"user":members[i],"lastMessage":{"text": ""}});
-                i++
-               }
-            }catch(err){
+//         let i = 0;
+//         for(const user of userData){
+//             try{
+//                 const lastMsg = await getLastMessage(user.chatId);
+//                if (lastMsg) {
+//                 latestMessages.push({"user":members[i],"lastMessage":lastMsg});
+//                 i++
+//                }
+//                else {
+//                 latestMessages.push({"user":members[i],"lastMessage":{"text": ""}});
+//                 i++
+//                }
+//             }catch(err){
 
-            }
-        }
-        res.status(200).json(latestMessages);
-    } catch (err) {
+//             }
+//         }
+//         res.status(200).json(latestMessages);
+//     } catch (err) {
 
-    }
-}
+//     }
+// }
 
-module.exports = { createMessage, getMessage, lastMessage };
+module.exports = { createMessage, getMessage,
+    // lastMessage
+ };
